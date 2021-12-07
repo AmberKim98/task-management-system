@@ -94,7 +94,7 @@
                 <td class="align-middle">{{ $task->actual_finish_date }}</td>
                 <td class="align-middle">
                     <div class="container d-flex justify-content-around">
-                        <a href="{{ route('task#editTask', $task->task_id) }}" class="action-link text-light"><i class="fa fa-pencil-square fa-lg text-primary pr-2" aria-hidden="true"></i>Edit</a>
+                        <a href="{{ route('task#editTask', $task->task_id) }}" class="link text-primary"><i class="fa fa-pencil-square fa-lg text-primary pr-2" aria-hidden="true"></i>Edit</a>
                     </div>
                 </td>
             </tr>
