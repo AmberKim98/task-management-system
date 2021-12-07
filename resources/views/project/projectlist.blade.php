@@ -54,10 +54,10 @@
                 <td class="align-middle">{{ $project->end_date }}</td>
                 <td class="align-middle">
                     <div class="container d-flex justify-content-around">
-                        <a href="{{ route('project#editProject', $project->project_id) }}" class="action-link text-light"><i class="fa fa-pencil-square fa-lg text-primary pr-2" aria-hidden="true"></i>Edit</a>
+                        <a href="{{ route('project#editProject', $project->project_id) }}" class="link text-primary"><i class="fa fa-pencil-square fa-lg text-primary pr-2" aria-hidden="true"></i>Edit</a>
 
                         <button type="submit" title="delete" style="border: none; background-color:transparent;outline:none;border:0;">
-                            <a href="" class="action-link text-light" data-toggle="modal" data-projectid="{{ $project->project_id }}" data-target="#deleteProject-{{ $project->project_id }}"><i class="fa fa-trash text-danger fa-lg pr-2" aria-hidden="true"></i>Remove</a>
+                            <a href="" class="link text-danger" data-toggle="modal" data-projectid="{{ $project->project_id }}" data-target="#deleteProject-{{ $project->project_id }}"><i class="fa fa-trash text-danger fa-lg pr-2" aria-hidden="true"></i>Remove</a>
                         </button>
                     </div>
 
