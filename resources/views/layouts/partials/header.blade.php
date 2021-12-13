@@ -6,18 +6,6 @@
   </button>
   <input type="hidden" name="position">
   <div class="collapse navbar-collapse justify-content-between" id="main_nav">
-
-    {{-- <script>
-      window.Laravel = <?php echo json_encode(['csrfToken' => csrf_token(),]); ?>
-    </script>
-
-    <!-- This makes the current user's id available in javascript -->
-    @if(!auth()->guest())
-    <script>
-        window.Laravel.userId = <?php echo auth()->user()->employee_id ?>;
-    </script>
-    @endif --}}
-
     <ul class="navbar-nav">
       @if(Auth::check() && Auth::user()->position == 0)
         <li class="nav-item dropdown mr-4"> 
