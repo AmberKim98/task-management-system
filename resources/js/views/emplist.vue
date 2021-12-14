@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="employee in employees" :key="employee.employee_id">
+                <tr v-for="employee in employees.data" :key="employee.employee_id">
                     <td>{{ employee.employee_id }}</td>
                     <td>{{ employee.employee_name }}</td>
                     <td>{{ employee.email }}</td>
@@ -29,7 +29,10 @@
             </tbody>
         </table>
    
-        <pagination :data="employees" @pagination-change-page="getEmployee"></pagination>
+        <div class="container d-flex justify-content-center">
+            <pagination :data="employees" @pagination-change-page="paginationPage"></pagination>
+        </div>
+        
     </div>
 </template>
 
@@ -37,7 +40,8 @@
 export default {
     data() {
         return {
-            employees: {}
+            employees: {},
+            page: 1
         }
     },
     mounted() {
@@ -48,9 +52,13 @@ export default {
         showEditForm(employee_id) {
 
         },
-        getEmployee(page=1) {
+        paginationPage(page) {
+            this.getEmployee(page);
+        },
+        getEmployee(page) {
+            if (typeof page === "undefined") { page = 1; }
             axios
-            .get('../api/employee-list')
+            .get('../api/employee-list?page=' + page)
             .then( response => {
                 this.employees = response.data;
                 console.log('employees', this.employees);

@@ -61,16 +61,8 @@ class EmployeeController extends Controller
      */
     public function showEmployeeList(Request $request)
     {
-        // $employees = $this->employeeInterface->searchEmployee($request);
-        // if(count($employees) == 0)
-        // {
-        //     $lastPage=$employees->lastPage();
-        //     $url = route('employee#employeeList').'?page='.$lastPage; 
-        //     return redirect($url);
-        // }
-        // // return view('employee.employeelist', compact('employees'));
-        // dd(response()->json($employees));
-        return response()->json(Employee::all());
+        $employees = Employee::paginate(5);
+        return response()->json($employees);
     }
 
     /**

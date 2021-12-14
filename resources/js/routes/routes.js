@@ -9,12 +9,7 @@ const routes = [
         path: '/vue/emp-list',
         name: 'emp-list',
         component: EmpList
-    },
-    {
-        path: '/vue/emp-create',
-        name: 'emp-create',
-        component: EmpCreate
-    }   
+    }  
 ];
 
 const router = new VueRouter({
