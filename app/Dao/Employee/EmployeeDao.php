@@ -19,6 +19,7 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function addNewEmployee($request)
     {
+        Log::info('employee dao');
         $employee = [
             'employee_name' => $request->name,
             'email' => $request->email,
@@ -95,7 +96,8 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function deleteEmployee($id)
     {
-        return Employee::find($id)->delete();
+        Employee::find($id)->delete();
+        return response()->json("Successfully deleted!");
     }
     /**
      * Check user for edit profile action.
