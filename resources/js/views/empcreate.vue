@@ -5,7 +5,7 @@
         <b-card-body>
         <b-form @submit.prevent="addNewEmployee" @reset="onReset">
             <b-form-group id="input-group-1" label="Employee Name:" label-for="name">
-                <b-form-input type="text" id="name" name="name" v-model="employee.name" v-bind:class="{ 'is-invalid': isValid && $v.employee.name.$error }"></b-form-input>
+                <b-form-input type="text" id="name" v-model="employee.name" v-bind:class="{ 'is-invalid': isValid && $v.employee.name.$error }"></b-form-input>
                 <div v-if="isValid && !$v.employee.name.required" class="invalid-feedback">
                     Employee Name is required.
                 </div>
@@ -43,14 +43,17 @@
             </b-form-group>
 
            <b-form-group id="input-group-6" label="Date of Birth:" label-for="dob" class="mt-3">
-                <b-form-input id="dob" type="date" v-model="employee.dob" ></b-form-input>
-                <div v-if="isValid && !$v.employee.profile.required" class="invalid-feedback">
+                <b-form-input id="dob" type="date" v-model="employee.dob" v-bind:class="{ 'is-invalid': isValid && $v.employee.dob.$error }"></b-form-input>
+                <div v-if="isValid && !$v.employee.dob.required" class="invalid-feedback">
                    Date of Birth is required.
                 </div>
             </b-form-group>
 
             <b-form-group id="input-group-7" label="Position:" label-for="position" class="mt-3">
-                <b-form-select id="position" v-model="employee.position" :options="position" class="form-select" ></b-form-select>
+                <b-form-select id="position" v-model="employee.position" :options="position" class="form-select" v-bind:class="{ 'is-invalid': isValid && $v.employee.position.$error }"></b-form-select>
+                <div v-if="isValid && !$v.employee.position.required" class="invalid-feedback">
+                    Position is required.
+                </div>
             </b-form-group>
 
             <div class="container-fluid d-flex justify-content-center mt-4">
@@ -70,7 +73,11 @@ import { required, email } from "vuelidate/lib/validators";
 export default {
     data() {
         return {
-            position: [ { text: 'Select your position:', value: null }, '0', '1' ],
+            position: [ 
+                { value:null, text: "Please select a position" },
+                { value: 0, text: "Admin" },
+                { value:1, text: "Member" }
+             ],
             employee: {
                 name: "",
                 email: "",
@@ -122,13 +129,13 @@ export default {
                 return;
             }
             axios.post('../api/add-new-employee', {
-                name: data.get('name'),
-                email: data.get('email'),
+                name: this.employee.name,
+                email: this.employee.email,
                 profile: data.get('profile'),
-                address: data.get('address'),
-                phone: data.get('phone'),
-                dob: data.get('dob'),
-                position: data.get('position'),
+                address: this.employee.address,
+                phone: this.employee.phone,
+                dob: this.employee.dob,
+                position: this.employee.position
             },
             {
                 headers: {
