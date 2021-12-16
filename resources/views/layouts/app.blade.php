@@ -28,16 +28,7 @@
         <my-header></my-header>
         <layout></layout>
         <my-footer></my-footer>
-        {{-- @include('layouts.partials.header') --}}
-        {{-- <main class="py-4">
-            @yield('content')
-
-    
-            @yield('scripts')
-        </main> --}}
-        {{-- @include('layouts.partials.footer') --}}
     </div>
     <script src="{{ mix('js/app.js')}}"></script>
 </body>
-
 </html>

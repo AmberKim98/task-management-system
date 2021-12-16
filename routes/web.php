@@ -50,8 +50,6 @@ use App\Http\Controllers\TaskController;
 // Route::post('edit-task/{task_id}', [TaskController::class, 'submitEditTaskForm'])->name('task#editTaskPost')->middleware(['login','prevent-back-history']);
 // Route::post('delete-employee/{employee_id}', [EmployeeController::class, 'deleteEmployee'])->name('employee#deleteEmployee')->middleware(['admin','login','prevent-back-history']);
 
-
-
 Auth::routes();
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

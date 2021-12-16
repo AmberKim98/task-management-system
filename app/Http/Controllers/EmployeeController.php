@@ -49,11 +49,23 @@ class EmployeeController extends Controller
      */
     public function submitCreateEmployeeForm(EmployeeRequest $request)
     {
-        $this->employeeInterface->addNewEmployee($request);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeCreatedNotification());
-        event(new EmployeeCreated());
-        return redirect()->route('employee#employeeList')->with('success','A new employee was successfully added!');
+        $employee = new Employee();
+        $employee->employee_name = $request->employee_name;
+        $employee->email = $request->email;
+        $employee->profile = $request->profile;
+        $employee->address = $request->address;
+        $employee->phone = $request->phone;
+        $employee->dob = $request->dob;
+        $employee->position = $request->position;
+        $employee->save();
+        return response()->json([
+            'message' => 'Successfully created!'
+        ]);
+        // $this->employeeInterface->addNewEmployee($request);
+        // $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
+        // Notification::send($employee_id, new EmployeeCreatedNotification());
+        // event(new EmployeeCreated());
+        // return redirect()->route('employee#employeeList')->with('success','A new employee was successfully added!');
     }
 
     /**
