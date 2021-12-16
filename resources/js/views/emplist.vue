@@ -38,7 +38,7 @@
                     <td>
                         <button class="btn btn-success" @click="showEditForm(employee.employee_id)">Show</button>
                         <button class="btn btn-primary offset-md-1" @click="showEditForm(employee.employee_id)">Edit</button>
-                        <button class="btn btn-danger offset-md-1" @click="showEditForm(employee.employee_id)">Delete</button>
+                        <button class="btn btn-danger offset-md-1" @click="deleteEmployee(employee.employee_id)">Delete</button>
                     </td>
                 </tr>
             </tbody>

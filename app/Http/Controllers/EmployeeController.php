@@ -49,23 +49,10 @@ class EmployeeController extends Controller
      */
     public function submitCreateEmployeeForm(EmployeeRequest $request)
     {
-        $employee = new Employee();
-        $employee->employee_name = $request->employee_name;
-        $employee->email = $request->email;
-        $employee->profile = $request->profile;
-        $employee->address = $request->address;
-        $employee->phone = $request->phone;
-        $employee->dob = $request->dob;
-        $employee->position = $request->position;
-        $employee->save();
+        $this->employeeInterface->addNewEmployee($request);
         return response()->json([
-            'message' => 'Successfully created!'
+            'message' => 'successfully created!'
         ]);
-        // $this->employeeInterface->addNewEmployee($request);
-        // $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        // Notification::send($employee_id, new EmployeeCreatedNotification());
-        // event(new EmployeeCreated());
-        // return redirect()->route('employee#employeeList')->with('success','A new employee was successfully added!');
     }
 
     /**
@@ -117,10 +104,7 @@ class EmployeeController extends Controller
      */
     public function deleteEmployee(int $id)
     {
-        $this->employeeInterface->deleteEmployee($id);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeDeletedNotification());
-        event(new EmployeeDeleted());
-        return redirect()->back()->with('success', 'The employee record was successfully deleted!');
+        $msg = $this->employeeInterface->deleteEmployee($id);
+        return $msg;
     }
 }

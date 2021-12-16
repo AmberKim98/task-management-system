@@ -80,6 +80,23 @@ export default {
         },
         createEmployee() {
             this.$router.push({ name: "emp-create" });
+        },
+        deleteEmployee(employeeId) {
+            console.log('delete employee...');
+            this.$confirm("Are you sure to delete this employee?", "", 'warning', true).then(() => {
+                axios
+                    .post("../api/delete-employee/" + employeeId)
+                    .then(response => {
+                        console.log(response.data);
+                        this.$alert(response.data).then(() => {
+                            location.reload();
+                        });
+
+                    })
+                    .catch(err => {
+                        console.log(err.response.data);
+                    });
+            });
         }
     }
 }

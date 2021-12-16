@@ -27,17 +27,6 @@ class EmployeeService implements EmployeeServiceInterface{
     public function addNewEmployee($request)
     {
         $result=$this->employeeDao->addNewEmployee($request);
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email
-        ];
-        if($result)
-        {
-            Mail::send('mail.account-activation', ['user' => $data], function($m) use ($request){
-                $m->from('tms.helpcenter@gmail.com', 'Task Management System');
-                $m->to($request->email)->subject('Account Activation');
-            });
-        }
         return $result;
     }
      /**

@@ -20,4 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('/employee-list', [EmployeeController::class, 'showEmployeeList']);
 Route::post('/add-new-employee', [EmployeeController::class, 'submitCreateEmployeeForm']);
-
+Route::post('/delete-employee/{id}', [EmployeeController::class, 'deleteEmployee']);
