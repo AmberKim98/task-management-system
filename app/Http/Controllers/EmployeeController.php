@@ -14,6 +14,7 @@ use App\Events\Employee\EmployeeDeleted;
 use App\Events\Employee\EmployeeUpdated;
 use Illuminate\Support\Facades\Notification;
 use Auth;
+use Log;
 
 // use App\Events\employeeCreated;
 
@@ -61,7 +62,9 @@ class EmployeeController extends Controller
      */
     public function showEmployeeList(Request $request)
     {
-        $employees = Employee::paginate(5);
+        Log::info('request...');
+        Log::info($request);
+        $employees = $this->employeeInterface->searchEmployee($request);
         return response()->json($employees);
     }
 

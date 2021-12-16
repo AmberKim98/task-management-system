@@ -1,6 +1,6 @@
 import VueRouter from "vue-router";
 import router from "./routes/routes";
-import Vue from 'vue/dist/vue';
+import Vue from 'vue/dist/vue.esm.js';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';

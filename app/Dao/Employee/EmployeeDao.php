@@ -7,6 +7,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Hash;
+use Log;
 use Illuminate\Http\Request;
 
 class EmployeeDao implements EmployeeDaoInterface
@@ -78,15 +79,16 @@ class EmployeeDao implements EmployeeDaoInterface
     {
         $search_result = null;
         if ($request->employee_id || $request->employee_name) {
+            Log::info($request);
             if ($request->employee_id) $search_result = Employee::where('employee_id', 'LIKE', "%$request->employee_id%");
 
             if ($request->employee_name) $search_result = Employee::where('employee_name', 'LIKE', "%$request->employee_name%");
             
             if ($request->employee_id && $request->employee_name) $search_result = Employee::where('employee_id', 'LIKE', "%$request->employee_id%")
                                             ->orWhere('employee_name', 'LIKE', "%$request->employee_name%");
-            return $search_result->paginate(7);
+            return $search_result->paginate(5);
         }
-        else return Employee::paginate(7);
+        else return Employee::paginate(5);
     }
     /**
      * Delete record of specific employee.

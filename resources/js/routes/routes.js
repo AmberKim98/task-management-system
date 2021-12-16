@@ -1,4 +1,3 @@
-import Vue from "vue";
 import VueRouter from "vue-router";
 import EmpList from "../views/emplist.vue";
 import EmpCreate from "../views/empcreate.vue";
