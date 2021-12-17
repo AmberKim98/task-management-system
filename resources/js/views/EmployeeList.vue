@@ -11,7 +11,10 @@
                 <b-col lg="4" class="pt-4"><b-button @click.prevent="searchEmployee()">Search</b-button></b-col>
             </div>
             <div class="col-md-3 d-flex justify-content-end">
-                <b-button variant="primary" @click.prevent="createEmployee()">Create New Employee&nbsp;<i class="fa fa-plus-circle" aria-hidden="true"></i></b-button>
+            <div class="pt-4">
+                <b-button variant="warning" @click.prevent="downloadEmployeeList()">Export&nbsp;<i class="fa fa-download" aria-hidden="true"></i></b-button>
+                <b-button variant="primary" @click.prevent="$router.push({ name: 'emp-create' })">Create New Employee&nbsp;<i class="fa fa-plus-circle" aria-hidden="true"></i></b-button>
+            </div>
             </div>
             
         </div>
@@ -36,8 +39,8 @@
                     <td>{{ employee.phone }}</td>
                     <td>{{ employee.dob }}</td>
                     <td>
-                        <button class="btn btn-success" @click="showEditForm(employee.employee_id)">Show</button>
-                        <button class="btn btn-primary offset-md-1" @click="showEditForm(employee.employee_id)">Edit</button>
+                        <button class="btn btn-success" @click="$router.push({ name: 'emp-profile', params: { id: employee.employee_id } })">Show</button>
+                        <button class="btn btn-primary offset-md-1" @click="$router.push({ name: 'emp-update', params: { id: employee.employee_id } })">Edit</button>
                         <button class="btn btn-danger offset-md-1" @click="deleteEmployee(employee.employee_id)">Delete</button>
                     </td>
                 </tr>
@@ -52,4 +55,4 @@
     </div>
 </template>
 
-<script src="../services/emplist.js"></script>
+<script src="../services/employee-list.js"></script>

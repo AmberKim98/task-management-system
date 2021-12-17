@@ -47,6 +47,8 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function editEmployee($request, $id)
     {
+        Log::info('updated data');
+        Log::info($request->profile);
         $employee = [
             'employee_name' => $request->name,
             'email' => $request->email,

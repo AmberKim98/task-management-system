@@ -42,7 +42,7 @@
                 </div>
             </b-form-group>
 
-           <b-form-group id="input-group-6" label="Date of Birth:" label-for="dob" class="mt-3">
+            <b-form-group id="input-group-6" label="Date of Birth:" label-for="dob" class="mt-3">
                 <b-form-input id="dob" type="date" v-model="employee.dob" v-bind:class="{ 'is-invalid': isValid && $v.employee.dob.$error }"></b-form-input>
                 <div v-if="isValid && !$v.employee.dob.required" class="invalid-feedback">
                    Date of Birth is required.
@@ -67,4 +67,4 @@
     </div>
 </template>
 
-<script src="../services/empcreate.js"></script>
+<script src="../services/employee-create.js"></script>

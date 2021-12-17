@@ -16,8 +16,6 @@ export default {
         this.getEmployee();
     },
     methods: {
-        showEditForm(employee_id) {
-        },
         paginationPage(page) {
             this.getEmployee(page);
         },
@@ -78,9 +76,6 @@ export default {
                 });
             }
         },
-        createEmployee() {
-            this.$router.push({ name: "emp-create" });
-        },
         deleteEmployee(employeeId) {
             console.log('delete employee...');
             this.$confirm("Are you sure to delete this employee?", "", 'warning', true).then(() => {
@@ -96,6 +91,20 @@ export default {
                     .catch(err => {
                         console.log(err.response.data);
                     });
+            });
+        },
+        downloadEmployeeList() {
+            axios
+            .get("../api/download-employee", {
+                responseType: "arraybuffer",
+            })
+            .then((response) => {
+                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                var fileLink = document.createElement("a");
+                fileLink.href = fileURL;
+                fileLink.setAttribute("download", "employees.xlsx");
+                document.body.appendChild(fileLink);
+                fileLink.click();
             });
         }
     }

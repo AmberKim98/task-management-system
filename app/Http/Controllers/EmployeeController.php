@@ -15,6 +15,9 @@ use App\Events\Employee\EmployeeUpdated;
 use Illuminate\Support\Facades\Notification;
 use Auth;
 use Log;
+use App\Exports\EmployeeExport;
+use Excel;
+use Carbon\Carbon;
 
 // use App\Events\employeeCreated;
 
@@ -74,7 +77,7 @@ class EmployeeController extends Controller
     public function showEmployeeProfile(int $id)
     {
         $employee = Employee::where('employee_id',$id)->first();
-        return view('employee.show-profile', ['employee' => $employee]);
+        return $employee;
     }
 
     /**
@@ -84,7 +87,7 @@ class EmployeeController extends Controller
     public function showEditProfileForm(int $id)
     {
         $employee = Employee::where('employee_id',$id)->first();
-        return view('employee.edit-employee', ['employee' => $employee]);
+        return $employee;
     }
      /**
      * Submit employee profile edit form
@@ -92,11 +95,8 @@ class EmployeeController extends Controller
      */
     public function submitEditProfileForm(UpdateProfileRequest $request, int $id)
     {
-        $this->employeeInterface->editEmployee($request, $id);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeUpdatedNotification());
-        event(new EmployeeUpdated());
-        return redirect()->route('employee#employeeList')->with('success','The employee record was successfully updated!');
+        $employee = $this->employeeInterface->editEmployee($request, $id);
+        return response()->json($employee);
     }
     /**
      * Delete record of specific employee
@@ -106,5 +106,13 @@ class EmployeeController extends Controller
     {
         $msg = $this->employeeInterface->deleteEmployee($id);
         return $msg;
+    }
+    /**
+     * Download excel file of employee list.
+     * 
+     */
+    public function downloadEmployeeList(Request $request)
+    {
+        return Excel::download(new EmployeeExport(), 'employees.xlsx');      
     }
 }

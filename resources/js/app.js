@@ -9,9 +9,9 @@ import Header from "./components/layouts/partials/HeaderComponent.vue";
 import Footer from "./components/layouts/partials/FooterComponent.vue";
 import Vuelidate from "vuelidate";
 import VueSimpleAlert from "vue-simple-alert";
-
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import excel from "vue-excel-export";
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -19,6 +19,7 @@ Vue.use(IconsPlugin);
 Vue.use(VueAxios, axios);
 Vue.use(Vuelidate);
 Vue.use(VueSimpleAlert);
+Vue.use(excel);
 
 require('./bootstrap');
 window.Vue = Vue;

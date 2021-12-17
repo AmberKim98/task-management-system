@@ -19,5 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/employee-list', [EmployeeController::class, 'showEmployeeList']);
+Route::get('/employee-list/{id}', [EmployeeController::class, 'showEditProfileForm']);
 Route::post('/add-new-employee', [EmployeeController::class, 'submitCreateEmployeeForm']);
+Route::post('/edit-employee/{id}', [EmployeeController::class, 'submitEditProfileForm']);
 Route::post('/delete-employee/{id}', [EmployeeController::class, 'deleteEmployee']);
+Route::get('/download-employee', [EmployeeController::class, 'downloadEmployeeList']);
+Route::get('/show-profile/{id}', [EmployeeController::class, 'showEmployeeProfile']);
