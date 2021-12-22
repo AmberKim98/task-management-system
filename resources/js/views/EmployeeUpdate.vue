@@ -3,7 +3,7 @@
         <b-card>
             <b-card-title>Employee Update Form</b-card-title>
             <b-card-body>
-                <b-form @submit.prevent="updateEmployee" @reset="onReset">
+                <b-form @submit.prevent="updateEmployee">
                     <b-form-group id="input-group-1" label="Employee Name:" label-for="employee_name">
                         <b-form-input type="text" id="employee_name" v-model="employee.employee_name" v-bind:class="{ 'is-invalid': isValid && $v.employee.employee_name.$error }"></b-form-input>
                         <div v-if="isValid && !$v.employee.employee_name.required" class="invalid-feedback">
@@ -19,8 +19,11 @@
                      </b-form-group>
 
                      <b-form-group id="input-group-3" label="Profile Picture:" label-for="profile" class="mt-3">
-                        <div v-if="employee.profile"><img :src="employee.profile" height="120" id="preview" class="mt-2"></div>
-                        <b-form-file id="profile" v-model="employee.profile" plain accept="image/png, image/jpeg, image/jpg" @change="handleFileUpload($event)" class="mt-3"></b-form-file>
+                        <div v-if="employee.profile"><img :src="employee.profile" height="120" id="preview" class="mt-2" v-bind:class="{ 'is-invalid': isValid && $v.employee.profile.$error }"></div>
+                        <b-form-file id="profile" v-model="employee.profile" accept="image/png, image/jpg, image/jpeg" plain @change="handleFileUpload($event)" class="mt-3"></b-form-file>
+                        <div v-if="isValid && !$v.employee.profile.isImageType" class="invalid-feedback">
+                            Profile picture must be png, jpg or jpeg.
+                        </div>
                     </b-form-group>
 
                     <b-form-group id="input-group-4" label="Address:" label-for="address" class="mt-3">
@@ -78,7 +81,7 @@
 
                      <div class="container-fluid d-flex justify-content-center mt-4">
                         <b-button type="submit" variant="primary" class="col-md-3 mx-4">Save</b-button>
-                        <b-button type="reset" variant="danger" class="col-md-3">Cancel</b-button>
+                        <b-button type="reset" variant="danger" class="col-md-3" @click.prevent="$router.push({ name:'emp-list' })">Cancel</b-button>
                     </div>
                 </b-form>
             </b-card-body>

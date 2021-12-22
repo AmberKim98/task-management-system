@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Notification;
 use Auth;
 use Log;
 use App\Exports\EmployeeExport;
+use App\Imports\EmployeeImport;
+use App\Http\Requests\ImportExcelRequest;
 use Excel;
 use Carbon\Carbon;
 
@@ -95,6 +97,7 @@ class EmployeeController extends Controller
      */
     public function submitEditProfileForm(UpdateProfileRequest $request, int $id)
     {
+        Log::info('step 1...controller');
         $employee = $this->employeeInterface->editEmployee($request, $id);
         return response()->json($employee);
     }
@@ -114,5 +117,15 @@ class EmployeeController extends Controller
     public function downloadEmployeeList(Request $request)
     {
         return Excel::download(new EmployeeExport(), 'employees.xlsx');      
+    }
+    /**
+     * Upload excel file of employee list.
+     * 
+     */
+    public function importEmployeeList(ImportExcelRequest $request)
+    {
+        Log::info('import controller..');
+        $path = $request->file('import_file');
+        $data = Excel::import(new EmployeeImport(), $path);
     }
 }

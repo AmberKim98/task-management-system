@@ -3,7 +3,7 @@
         <b-card>
         <b-card-title>Employee Creation Form</b-card-title>
         <b-card-body>
-        <b-form @submit.prevent="addNewEmployee" @reset="onReset">
+        <b-form @submit.prevent="addNewEmployee">
             <b-form-group id="input-group-1" label="Employee Name:" label-for="name">
                 <b-form-input type="text" id="name" v-model="employee.name" v-bind:class="{ 'is-invalid': isValid && $v.employee.name.$error }"></b-form-input>
                 <div v-if="isValid && !$v.employee.name.required" class="invalid-feedback">
@@ -58,7 +58,7 @@
 
             <div class="container-fluid d-flex justify-content-center mt-4">
                 <b-button type="submit" variant="primary" class="col-md-3 mx-4">Save</b-button>
-                <b-button type="reset" variant="danger" class="col-md-3">Cancel</b-button>
+                <b-button type="reset" variant="danger" class="col-md-3" @click.prevent="$router.push({ name:'emp-list' })">Cancel</b-button>
             </div>
             
         </b-form>

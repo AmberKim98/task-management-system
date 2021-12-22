@@ -12,6 +12,8 @@ import VueSimpleAlert from "vue-simple-alert";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import excel from "vue-excel-export";
+import ImagePlaceholder from 'vue-image-placeholder';
+import Preloader from './components/layouts/partials/Preloader.vue';
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -30,6 +32,8 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('layout', App);
 Vue.component('my-header', Header);
 Vue.component('my-footer', Footer);
+Vue.component('ImagePlaceholder', ImagePlaceholder);
+Vue.component('Preloader', Preloader);
 
 const app = new Vue({
     el: '#app',

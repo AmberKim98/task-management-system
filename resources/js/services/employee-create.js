@@ -65,7 +65,11 @@ export default {
                 }
             })
             .then( response=> {
-                this.$router.push({ name: 'emp-list' });
+                if(response.status === 200) {
+                    this.$alert("Successfully Created!", "", "success").then(() => {
+                        this.$router.push({ name: 'emp-list' });
+                    });
+                }
             })
             .catch(err => {
                 this.$alert(err);

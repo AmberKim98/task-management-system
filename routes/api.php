@@ -25,3 +25,5 @@ Route::post('/edit-employee/{id}', [EmployeeController::class, 'submitEditProfil
 Route::post('/delete-employee/{id}', [EmployeeController::class, 'deleteEmployee']);
 Route::get('/download-employee', [EmployeeController::class, 'downloadEmployeeList']);
 Route::get('/show-profile/{id}', [EmployeeController::class, 'showEmployeeProfile']);
+Route::post('/import', [EmployeeController::class, 'importEmployeeList']);
+Route::get('/get-password/{id}', [EmployeeController::class, 'getOldPassword']);

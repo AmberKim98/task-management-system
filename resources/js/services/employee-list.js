@@ -1,4 +1,5 @@
 import { isEmpty } from "lodash";
+import readXlsxFile from "read-excel-file";
 
 export default {
     data() {
@@ -8,7 +9,10 @@ export default {
             employees: {},
             page: 1,
             allPosts: true,
-            searchPosts: false
+            searchPosts: false,
+            loading:false,
+            file: null,
+            import_file: null
         }
     },
     mounted() {
@@ -23,19 +27,24 @@ export default {
             this.searchEmployee(page);
         },
         getEmployee(page) {
+            this.loading = true;
             this.searchPosts = false;
             this.allPosts = true;
 
             if (typeof page === "undefined") { page = 1; }
-            axios
-            .get('../api/employee-list?page=' + page)
-            .then( response => {
-                this.employees = response.data;
-                console.log('employees', this.employees);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+            setTimeout(() => {
+                this.loading = false;
+                axios
+                .get('../api/employee-list?page=' + page)
+                .then( response => {      
+                    this.employees = response.data;
+                    console.log('employees', this.employees);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            }, 3000);
+            
         },
         searchEmployee(page) {
             this.searchPosts = true;
@@ -83,7 +92,7 @@ export default {
                     .post("../api/delete-employee/" + employeeId)
                     .then(response => {
                         console.log(response.data);
-                        this.$alert(response.data).then(() => {
+                        this.$alert(response.data, "", "success").then(() => {
                             location.reload();
                         });
 
@@ -106,6 +115,41 @@ export default {
                 document.body.appendChild(fileLink);
                 fileLink.click();
             });
+        },
+        onFileChange(event) {
+            this.import_file = event.target.files[0];
+
+            readXlsxFile(this.import_file).then((rows) => {
+                console.log('rows: ', rows);
+            })
+        },
+        uploadEmployeeList() {
+            let formData = new FormData();
+
+            readXlsxFile(this.import_file).then((rows) => {
+                console.log('rows: ', rows);
+            })
+            
+            formData.append('import_file', this.import_file);
+            
+            console.log('Import file..', this.import_file);
+
+            axios.post("../../api/import", formData, {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                if(response.status === 200) {
+                    console.log(response.data);
+                    this.$alert("Successfully created!", "", "success").then(() => {
+                        location.reload();
+                    });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     }
 }
