@@ -3,6 +3,7 @@ import EmpList from "../views/EmployeeList.vue";
 import EmpCreate from "../views/EmployeeCreate.vue";
 import EmpProfile from "../views/EmployeeProfile.vue";
 import EmpUpdate from "../views/EmployeeUpdate.vue";
+import Test from "../views/Test.vue";
 
 console.log('this is router');
 const routes = [
@@ -25,7 +26,12 @@ const routes = [
         path: '/vue/emp-update/:id',
         name: 'emp-update',
         component: EmpUpdate,
-    }   
+    },
+    {
+        path: '/vue/test',
+        name: 'test',
+        component: Test
+    }  
 ];
 
 const router = new VueRouter({
