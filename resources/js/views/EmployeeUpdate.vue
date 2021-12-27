@@ -11,7 +11,7 @@
                         </div>
                      </b-form-group>
 
-                    <b-form-group id="input-group-1" label="Email:" label-for="email">
+                    <b-form-group id="input-group-2" label="Email:" label-for="email">
                         <b-form-input type="email" id="email" v-model="employee.email" v-bind:class="{ 'is-invalid': isValid && $v.employee.email.$error }"></b-form-input>
                         <div v-if="isValid && !$v.employee.email.email" class="invalid-feedback">
                             Email is incorrect.
@@ -19,10 +19,11 @@
                      </b-form-group>
 
                      <b-form-group id="input-group-3" label="Profile Picture:" label-for="profile" class="mt-3">
-                        <div v-if="employee.profile"><img :src="employee.profile" height="120" id="preview" class="mt-2" v-bind:class="{ 'is-invalid': isValid && $v.employee.profile.$error }"></div>
-                        <b-form-file id="profile" v-model="employee.profile" accept="image/png, image/jpg, image/jpeg" plain @change="handleFileUpload($event)" class="mt-3"></b-form-file>
-                        <div v-if="isValid && !$v.employee.profile.isImageType" class="invalid-feedback">
-                            Profile picture must be png, jpg or jpeg.
+                        <div v-if="employee.profile"><img :src="employee.profile" height="120" id="preview" class="mt-2"></div>
+                        <input type="hidden" v-model="oldProfile">
+                        <b-form-file id="profile" v-model="newProfile" accept="image/png, image/jpg, image/jpeg" @change="handleFileUpload($event)" class="mt-3" :class="{ 'is-invalid': isValid && $v.newProfile.$error }" plain></b-form-file>
+                        <div v-if="isValid && !$v.newProfile.isImageType" class="invalid-feedback">
+                            Profile picture must be png,jpg and jpeg.
                         </div>
                     </b-form-group>
 
@@ -51,28 +52,31 @@
 
                     <div v-show="changePwd === 'yes'">
                         <b-form-group id="input-group-9" label="Current Password:" label-for="old_pwd" class="mt-3">
-                            <b-form-input type="password" v-model="employee.old_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.old_password.$error }"></b-form-input>
-                            <div v-if="isValid && !$v.employee.old_password.required" class="invalid-feedback">
+                            <b-form-input v-if="changePwd === 'yes'" type="password" v-model="employee.old_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.old_password.$error }"></b-form-input>
+                            <b-form-input v-else type="password" v-model="employee.old_password"></b-form-input>
+                            <div v-if="changePwd === 'yes' && isValid && !$v.employee.old_password.required" class="invalid-feedback">
                                 Current password is required.
                             </div>
                         </b-form-group>
 
                         <b-form-group id="input-group-10" label="New Password:" label-for="new_pwd" class="mt-3">
-                            <b-form-input type="password" v-model="employee.new_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.new_password.$error }"></b-form-input>
-                            <div v-if="isValid && !$v.employee.new_password.required" class="invalid-feedback">
+                            <b-form-input v-if="changePwd === 'yes'" type="password" v-model="employee.new_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.new_password.$error }"></b-form-input>
+                            <b-form-input v-else type="password" v-model="employee.new_password"></b-form-input>
+                            <div v-if="changePwd === 'yes' && isValid && !$v.employee.new_password.required" class="invalid-feedback">
                                 New password is required.
                             </div>
-                            <div v-if="isValid && !$v.employee.new_password.minLength" class="invalid-feedback">
+                            <div v-if="changePwd === 'yes' && isValid && !$v.employee.new_password.minLength" class="invalid-feedback">
                                 New password must be at least 6 characters.
                             </div>
                         </b-form-group>
 
                         <b-form-group id="input-group-11" label="Confirm Password:" label-for="confirm_password" class="mt-3">
-                            <b-form-input type="password" v-model="employee.confirm_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.confirm_password.$error }"></b-form-input>
-                            <div v-if="isValid && !$v.employee.confirm_password.required" class="invalid-feedback">
+                            <b-form-input v-if="changePwd === 'yes'" type="password" v-model="employee.confirm_password" v-bind:class="{ 'is-invalid': isValid && $v.employee.confirm_password.$error }"></b-form-input>
+                            <b-form-input v-else type="password" v-model="employee.confirm_password"></b-form-input>
+                            <div v-if="changePwd === 'yes' && isValid && !$v.employee.confirm_password.required" class="invalid-feedback">
                                 Confirm password is required.
                             </div>
-                            <div v-if="isValid && !$v.employee.confirm_password.sameAsPassword" class="invalid-feedback">
+                            <div v-if="changePwd === 'yes' && isValid && !$v.employee.confirm_password.sameAsPassword" class="invalid-feedback">
                                 Confirm password does not match with the new password.
                             </div>
                         </b-form-group>

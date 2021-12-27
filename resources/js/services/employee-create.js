@@ -1,5 +1,14 @@
 import { required, email } from "vuelidate/lib/validators";
 
+const isImageType = (value, vm) =>  {
+    if (!value) {
+      return true;
+    }
+    let file = value;  
+    let type = (file.type == 'image/png') || (file.type == 'image/jpg') || (file.type == 'image/jpeg');
+    return type;
+}
+
 export default {
     data() {
         return {
@@ -24,7 +33,7 @@ export default {
         employee: {
             name: { required },
             email: { required, email },
-            profile: { required },
+            profile: { isImageType },
             address: { required },
             phone: { required },
             dob: { required },
@@ -32,14 +41,13 @@ export default {
         }
     },
     mounted() {
-        console.log('Employee Creation is started...');
+        
     },
     methods: {
         handleFileUpload(event){
             this.employee.profile = event.target.files[0];
         },
         addNewEmployee() {
-            console.log('this is add new employee...');
             const data = new FormData();
 
             data.append('name', this.employee.name);
@@ -51,8 +59,6 @@ export default {
             data.append('position', this.employee.position);
 
             this.isValid = true;
-
-            console.log('Employee Info: ',this.employee);
 
             this.$v.$touch();
             if(this.$v.$invalid) {

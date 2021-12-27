@@ -23,8 +23,8 @@
 
             <b-form-group id="input-group-3" label="Profile Picture:" label-for="profile" class="mt-3">
                 <b-form-file id="profile" v-model="employee.profile" plain v-bind:class="{ 'is-invalid': isValid && $v.employee.profile.$error }" accept="image/png, image/jpeg, image/jpg" @change="handleFileUpload($event)"></b-form-file>
-                <div v-if="isValid && !$v.employee.profile.required" class="invalid-feedback">
-                   Profile picture is required.
+                <div v-if="isValid && !$v.employee.profile.isImageType" class="invalid-feedback">
+                   Profile picture must be png/jpg or jpeg type.
                 </div>
             </b-form-group>
 

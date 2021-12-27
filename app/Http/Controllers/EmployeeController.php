@@ -6,22 +6,10 @@ use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Interfaces\Services\Employee\EmployeeServiceInterface;
 use App\Models\Employee;
-use App\Notifications\Employee\EmployeeCreatedNotification;
-use App\Notifications\Employee\EmployeeDeletedNotification;
-use App\Notifications\Employee\EmployeeUpdatedNotification;
-use App\Events\Employee\EmployeeCreated;
-use App\Events\Employee\EmployeeDeleted;
-use App\Events\Employee\EmployeeUpdated;
-use Illuminate\Support\Facades\Notification;
-use Auth;
-use Log;
 use App\Exports\EmployeeExport;
 use App\Imports\EmployeeImport;
 use App\Http\Requests\ImportExcelRequest;
 use Excel;
-use Carbon\Carbon;
-
-// use App\Events\employeeCreated;
 
 class EmployeeController extends Controller
 {
@@ -66,8 +54,6 @@ class EmployeeController extends Controller
      */
     public function showEmployeeList(Request $request)
     {
-        Log::info('request...');
-        Log::info($request);
         $employees = $this->employeeInterface->searchEmployee($request);
         return response()->json($employees);
     }
@@ -97,7 +83,6 @@ class EmployeeController extends Controller
      */
     public function submitEditProfileForm(UpdateProfileRequest $request, int $id)
     {
-        Log::info('step 1...controller');
         $employee = $this->employeeInterface->editEmployee($request, $id);
         return response()->json($employee);
     }
@@ -124,7 +109,6 @@ class EmployeeController extends Controller
      */
     public function importEmployeeList(ImportExcelRequest $request)
     {
-        Log::info('import controller..');
         $path = $request->file('import_file');
         $data = Excel::import(new EmployeeImport(), $path);
     }

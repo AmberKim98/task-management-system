@@ -16,12 +16,9 @@ export default {
         axios.get('../../api/show-profile/'+this.$route.params.id)
         .then(response => {
             this.employee = response.data;
-            console.log(this.employee);
         })
         .catch(err => {
             console.log(err);
         });
-        
-        console.log(this.employee);
     }
 }

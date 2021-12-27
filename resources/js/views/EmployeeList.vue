@@ -49,8 +49,22 @@
                         <button class="btn btn-outline-danger offset-md-1" @click="deleteEmployee(employee.employee_id)">Delete</button>
                     </td>
                 </tr>
+                <tr v-if="records<5" v-model="records" v-bind:style="{ 'height': '3.5em' }" v-for="n in 5-records">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
+
+        <div>
+            <p>Total Number of Employees: <b>{{ getTotalEmployees }}</b></p>
+        </div>
+
         <div class="container d-flex justify-content-center">
             <pagination v-if="allPosts" :data="employees" @pagination-change-page="paginationPage"></pagination>
             <pagination v-if="searchPosts" :data="employees" @pagination-change-page="paginationPageWithSearch"></pagination>

@@ -3,11 +3,8 @@ namespace App\Dao\Employee;
 
 use App\Interfaces\Dao\Employee\EmployeeDaoInterface;
 use App\Models\Employee;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Hash;
-use Log;
+use DB;
 use Illuminate\Http\Request;
 
 class EmployeeDao implements EmployeeDaoInterface
@@ -47,8 +44,6 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function editEmployee($request, $id)
     {
-        Log::info('updated data');
-        Log::info($request->profile);
         $employee = [
             'employee_name' => $request->name,
             'email' => $request->email,
@@ -81,7 +76,6 @@ class EmployeeDao implements EmployeeDaoInterface
     {
         $search_result = null;
         if ($request->employee_id || $request->employee_name) {
-            Log::info($request);
             if ($request->employee_id) $search_result = Employee::where('employee_id', 'LIKE', "%$request->employee_id%");
 
             if ($request->employee_name) $search_result = Employee::where('employee_name', 'LIKE', "%$request->employee_name%");

@@ -1,9 +1,17 @@
-import { max } from "lodash";
+import { isEmpty, max } from "lodash";
 import { required, email, maxLength, requiredIf, minLength, sameAs } from "vuelidate/lib/validators";
+
+const isImageType = (value, vm) =>  {
+    if (!value) {
+      return true;
+    }
+    let file = value;  
+    let type = (file.type == 'image/png') || (file.type == 'image/jpg') || (file.type == 'image/jpeg');
+    return type;
+  }
 
 export default {
     data() {
-        
         return {
             position: [ 
                 { value:null, text: "Please select a position" },
@@ -14,7 +22,7 @@ export default {
                 employee_name: "",
                 email: "",
                 password: "",
-                profile: null,
+                profile: "",
                 address: "",
                 phone: "",
                 dob: "",
@@ -34,15 +42,12 @@ export default {
         }
     },
     validations() {
-        const isImageType = this.employee.profile['type'] == 'image/png' || this.employee.profile['type'] == 'image/jpg' || this.employee.profile['type'] == 'image/jpeg';
-
         if(this.changePwd === 'yes') {
             return {
                 employee: {
                     employee_name: { required },
                     email: { email },
                     address: { maxLength: maxLength(255) },
-                    profile: isImageType,
                     old_password: { required: requiredIf(function() {
                         return this.changePwd;
                     }) 
@@ -55,7 +60,8 @@ export default {
                         return this.changePwd;
                     }), sameAsPassword: sameAs('new_password') 
                 }
-            }
+            },
+            newProfile: { isImageType }
         }
         }
         else {
@@ -63,9 +69,9 @@ export default {
                 employee: {
                     employee_name: { required },
                     email: { email },
-                    address: { maxLength: maxLength(255) },
-                    profile: isImageType
-                }
+                    address: { maxLength: maxLength(255) }
+                },
+                newProfile: { isImageType }
             }
         }
     },
@@ -82,24 +88,18 @@ export default {
             this.employee.position =response.data.position; 
             if(this.employee.profile == 'profile.png')
             {
-                this.employee.profile = "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png";
+                this.employee.profile =  "/img/employee/employee_profiles/dummy-profile.png";
             }
-            var profile = new Blob([this.employee.profile], { type: 'image/png'});
-            console.log(profile);
         })
         .catch(err => {
             console.log(err);
         });
     },
-    updated() {
-        console.log(this.employee.old_password);
-    },  
     methods: {
         readProfileImage(url) {
             const response = Promise.all([url]);
             const ext = url.split(".").pop();
             const filename = url.split("/").pop();
-            console.log(ext, filename);
             const metadata = { type: 'image/png' };
             return new File([response], filename, metadata);
         },
@@ -112,7 +112,6 @@ export default {
             const reader = new FileReader();
             reader.onload = function(event) {
                 image.src = event.target.result;
-                console.log('source...',image.src);
             }
             reader.readAsDataURL(profile);
         },
@@ -121,7 +120,12 @@ export default {
             data.append('employee_id', this.employee.employee_id);
             data.append('name', this.employee.employee_name);
             data.append('email', this.employee.email);
-            data.append('profile', this.newProfile);
+            if(!isEmpty(this.newProfile)) {
+                data.append('profile', this.newProfile);
+            }
+            else { 
+                data.append('profile', this.employee.profile);
+            }
             data.append('old_password', this.employee.old_password);
             data.append('new_password', this.employee.new_password);
             data.append('new_password_confirmation', this.employee.confirm_password);
@@ -131,9 +135,9 @@ export default {
             data.append('position', this.employee.position);
 
             this.isValid = true;
-            console.log(data.get('profile'));
 
             this.$v.$touch();
+
             if(this.$v.$invalid) {
                 return;
             }
@@ -145,7 +149,6 @@ export default {
                 }
             })
             .then(response => {
-                console.log('Profile after uploading....', this.employee.profile);
                 this.$router.push({name: 'emp-list'});
             })
             .catch(err => {
