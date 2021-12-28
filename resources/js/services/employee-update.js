@@ -1,5 +1,6 @@
 import { isEmpty, max } from "lodash";
 import { required, email, maxLength, requiredIf, minLength, sameAs } from "vuelidate/lib/validators";
+import constants from '../constant';
 
 const isImageType = (value, vm) =>  {
     if (!value) {
@@ -39,6 +40,7 @@ export default {
             isValid: false,
             oldProfile: null,
             newProfile: null,
+            profileURL : constants.profileURL
         }
     },
     validations() {
@@ -90,6 +92,9 @@ export default {
             {
                 this.employee.profile =  "/img/employee/employee_profiles/dummy-profile.png";
             }
+            this.employee.profile = this.profileURL + this.employee.profile;
+            console.log(this.employee.profile);
+            console.log(this.profileURL);
         })
         .catch(err => {
             console.log(err);
@@ -108,10 +113,12 @@ export default {
             this.previewImage(this.newProfile);
         },
         previewImage(profile) {
+            console.log('preview iamge...');
             const image = document.getElementById('preview');
             const reader = new FileReader();
             reader.onload = function(event) {
                 image.src = event.target.result;
+                console.log(image.src);
             }
             reader.readAsDataURL(profile);
         },

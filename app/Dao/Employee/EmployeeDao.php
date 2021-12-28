@@ -6,6 +6,8 @@ use App\Models\Employee;
 use Hash;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Log;
 
 class EmployeeDao implements EmployeeDaoInterface
 {
@@ -30,10 +32,10 @@ class EmployeeDao implements EmployeeDaoInterface
         if($result && $request->profile)
         {
             $name = $result->employee_id.'.'.$request->profile->getClientOriginalExtension();
-            $destinationPath = public_path('img/employee/employee_profiles');
-            $imagePath = env('APP_URL').'/img/employee/employee_profiles/'. $name;
-            $result->profile->move($destinationPath,$name);
-            $result->profile = $imagePath;
+            $path = 'test/'.$name;
+            Storage::disk('s3')->put($path, file_get_contents($request->profile));
+            // $imagePath = 'https://jobscale-dev.s3.ap-northeast-1.amazonaws.com/test/'.$name;
+            $result->profile = $name;
             $result->save();
         }
         return $result;
@@ -93,7 +95,12 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function deleteEmployee($id)
     {
+        $profile = Employee::where('employee_id', $id)->value('profile');
+        Log::info($profile);
         Employee::find($id)->delete();
+        $path = 'test/'.$profile;
+        Log::info($path);
+        Storage::disk('s3')->delete($path);
         return response()->json("Successfully deleted!");
     }
     /**

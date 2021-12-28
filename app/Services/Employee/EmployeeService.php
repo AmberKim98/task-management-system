@@ -3,6 +3,7 @@ namespace App\Services\Employee;
 
 use App\Interfaces\Services\Employee\EmployeeServiceInterface;
 use App\Interfaces\Dao\Employee\EmployeeDaoInterface;
+use Illuminate\Support\Facades\Storage;
 use Mail;
 
 class EmployeeService implements EmployeeServiceInterface{
@@ -43,10 +44,10 @@ class EmployeeService implements EmployeeServiceInterface{
         $name = null;
         if(!(is_string($request->profile))){
             $name = $request->employee_id.'.'.$request->profile->getClientOriginalExtension();
-            $destinationPath = public_path('img/employee/employee_profiles');
-            $request->profile->move($destinationPath,$name);
-            $imagePath = env('APP_URL').'/img/employee/employee_profiles/'. $name;
-            $request->profile = $imagePath;
+            $path = 'test/'.$name;
+            Storage::disk('s3')->put($path, file_get_contents($request->profile));
+            // $imagePath = 'https://jobscale-dev.s3.ap-northeast-1.amazonaws.com/test/'.$name;
+            $request->profile = $name;
         }
         $result = $this->employeeDao->editEmployee($request, $id);
         return $result;
