@@ -3,10 +3,8 @@ namespace App\Dao\Employee;
 
 use App\Interfaces\Dao\Employee\EmployeeDaoInterface;
 use App\Models\Employee;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Hash;
+use DB;
 use Illuminate\Http\Request;
 
 class EmployeeDao implements EmployeeDaoInterface
@@ -84,9 +82,9 @@ class EmployeeDao implements EmployeeDaoInterface
             
             if ($request->employee_id && $request->employee_name) $search_result = Employee::where('employee_id', 'LIKE', "%$request->employee_id%")
                                             ->orWhere('employee_name', 'LIKE', "%$request->employee_name%");
-            return $search_result->paginate(7);
+            return $search_result->paginate(5);
         }
-        else return Employee::paginate(7);
+        else return Employee::paginate(5);
     }
     /**
      * Delete record of specific employee.
@@ -95,7 +93,8 @@ class EmployeeDao implements EmployeeDaoInterface
      */
     public function deleteEmployee($id)
     {
-        return Employee::find($id)->delete();
+        Employee::find($id)->delete();
+        return response()->json("Successfully deleted!");
     }
     /**
      * Check user for edit profile action.

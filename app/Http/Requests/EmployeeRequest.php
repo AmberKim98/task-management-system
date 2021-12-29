@@ -26,7 +26,7 @@ class EmployeeRequest extends FormRequest
         return [
             'name' => 'required|string|regex:/^[\pL\s\-]+$/u',
             'email' => 'required|email|unique:employees',
-            'profile' => 'mimes:jpg,png',
+            'profile',
             'address' => 'string|max:255',
             'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|max:11',
             'dob' => 'date',

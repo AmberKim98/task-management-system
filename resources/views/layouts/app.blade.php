@@ -10,6 +10,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/common.css') }}" rel="stylesheet">
     <link href="{{ asset('css/layouts/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -17,7 +18,6 @@
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/fontawesome.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/layouts/header.js') }}"></script>
@@ -25,14 +25,10 @@
 
 <body>
     <div id="app">
-        @include('layouts.partials.header')
-        <main class="py-4">
-            @yield('content')
-
-            @yield('scripts')
-        </main>
-        @include('layouts.partials.footer')
+        <my-header></my-header>
+        <layout></layout>
+        <my-footer></my-footer>
     </div>
+    <script src="{{ mix('js/app.js')}}"></script>
 </body>
-
 </html>

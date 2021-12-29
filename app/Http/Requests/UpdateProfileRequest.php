@@ -29,7 +29,7 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => 'required|string|regex:/^[\pL\s\-]+$/u',
             'email' => ['email', Rule::unique('employees')->ignore($request->employee_id, 'employee_id')],
-            'profile' => ['nullable','mimes:jpg,png'],
+            'profile',
             'address' => 'string|max:255',
             'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|max:11',
             'dob' => 'date',

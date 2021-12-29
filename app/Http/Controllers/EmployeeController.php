@@ -6,16 +6,10 @@ use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Interfaces\Services\Employee\EmployeeServiceInterface;
 use App\Models\Employee;
-use App\Notifications\Employee\EmployeeCreatedNotification;
-use App\Notifications\Employee\EmployeeDeletedNotification;
-use App\Notifications\Employee\EmployeeUpdatedNotification;
-use App\Events\Employee\EmployeeCreated;
-use App\Events\Employee\EmployeeDeleted;
-use App\Events\Employee\EmployeeUpdated;
-use Illuminate\Support\Facades\Notification;
-use Auth;
-
-// use App\Events\employeeCreated;
+use App\Exports\EmployeeExport;
+use App\Imports\EmployeeImport;
+use App\Http\Requests\ImportExcelRequest;
+use Excel;
 
 class EmployeeController extends Controller
 {
@@ -49,10 +43,9 @@ class EmployeeController extends Controller
     public function submitCreateEmployeeForm(EmployeeRequest $request)
     {
         $this->employeeInterface->addNewEmployee($request);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeCreatedNotification());
-        event(new EmployeeCreated());
-        return redirect()->route('employee#employeeList')->with('success','A new employee was successfully added!');
+        return response()->json([
+            'message' => 'successfully created!'
+        ]);
     }
 
     /**
@@ -62,13 +55,7 @@ class EmployeeController extends Controller
     public function showEmployeeList(Request $request)
     {
         $employees = $this->employeeInterface->searchEmployee($request);
-        if(count($employees) == 0)
-        {
-            $lastPage=$employees->lastPage();
-            $url = route('employee#employeeList').'?page='.$lastPage; 
-            return redirect($url);
-        }
-        return view('employee.employeelist', compact('employees'));
+        return response()->json($employees);
     }
 
     /**
@@ -78,7 +65,7 @@ class EmployeeController extends Controller
     public function showEmployeeProfile(int $id)
     {
         $employee = Employee::where('employee_id',$id)->first();
-        return view('employee.show-profile', ['employee' => $employee]);
+        return $employee;
     }
 
     /**
@@ -88,7 +75,7 @@ class EmployeeController extends Controller
     public function showEditProfileForm(int $id)
     {
         $employee = Employee::where('employee_id',$id)->first();
-        return view('employee.edit-employee', ['employee' => $employee]);
+        return $employee;
     }
      /**
      * Submit employee profile edit form
@@ -96,11 +83,8 @@ class EmployeeController extends Controller
      */
     public function submitEditProfileForm(UpdateProfileRequest $request, int $id)
     {
-        $this->employeeInterface->editEmployee($request, $id);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeUpdatedNotification());
-        event(new EmployeeUpdated());
-        return redirect()->route('employee#employeeList')->with('success','The employee record was successfully updated!');
+        $employee = $this->employeeInterface->editEmployee($request, $id);
+        return response()->json($employee);
     }
     /**
      * Delete record of specific employee
@@ -108,10 +92,24 @@ class EmployeeController extends Controller
      */
     public function deleteEmployee(int $id)
     {
-        $this->employeeInterface->deleteEmployee($id);
-        $employee_id = Employee::where('employee_id',auth()->user()->employee_id)->get('employee_id');
-        Notification::send($employee_id, new EmployeeDeletedNotification());
-        event(new EmployeeDeleted());
-        return redirect()->back()->with('success', 'The employee record was successfully deleted!');
+        $msg = $this->employeeInterface->deleteEmployee($id);
+        return $msg;
+    }
+    /**
+     * Download excel file of employee list.
+     * 
+     */
+    public function downloadEmployeeList(Request $request)
+    {
+        return Excel::download(new EmployeeExport(), 'employees.xlsx');      
+    }
+    /**
+     * Upload excel file of employee list.
+     * 
+     */
+    public function importEmployeeList(ImportExcelRequest $request)
+    {
+        $path = $request->file('import_file');
+        $data = Excel::import(new EmployeeImport(), $path);
     }
 }
